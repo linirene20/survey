@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>問卷調查</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      background: #f0f4f8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 48px 40px;
+      max-width: 420px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    }
+    .icon { font-size: 48px; margin-bottom: 16px; }
+    h1 { font-size: 22px; color: #1a202c; margin-bottom: 12px; }
+    p  { font-size: 15px; color: #718096; line-height: 1.6; margin-bottom: 24px; }
+    .btn {
+      display: inline-block;
+      background: #4A90D9;
+      color: white;
+      padding: 14px 36px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .btn:hover { background: #357ABD; }
+    .note { font-size: 12px; color: #a0aec0; margin-top: 20px; }
+  </style>
+</head>
+<body>
+<div class="card" id="app">
+  <div class="icon">📋</div>
+  <h1>問卷調查</h1>
+  <p>感謝您參與本次研究，請點擊下方按鈕開始填寫問卷。</p>
+  <button class="btn" onclick="startSurvey()">開始填寫問卷</button>
+  <p class="note">每位受試者僅需填寫一份問卷</p>
+</div>
+
+<script>
+  // =============================================
+  // 請將以下4個連結替換成你的 Google Forms 連結
+  // =============================================
+  const SURVEY_URLS = [
+    "https://docs.google.com/forms/d/e/1FAIpQLSdvSxjFTiUZaES7cmtLG3b9Xq8Bh0ul3S3nzrRZyp15esbktw/viewform?usp=header",
+    "https://docs.google.com/forms/d/e/1FAIpQLSdJzx9jSUA2BM5zZAfFFAZaDRE_-e6upVY6Q2_vDCqrgu_kKw/viewform?usp=header",
+    "https://docs.google.com/forms/d/e/1FAIpQLScUxjuuEY0BM9bZzq1cB1SgRVzyWZkqTVcUj2yNz4bqCJEjAg/viewform?usp=header",
+    "https://docs.google.com/forms/d/e/1FAIpQLSeLCZo34jJujOiSKOXCOS83TVGPazbiOmlf3LxlQbdJGZnczg/viewform?usp=header"
+  ];
+
+  const COOKIE_NAME = "survey_done";
+  const COOKIE_DAYS = 365;
+
+  // 讀取 cookie
+  function getCookie(name) {
+    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    return match ? decodeURIComponent(match[2]) : null;
+  }
+
+  // 寫入 cookie
+  function setCookie(name, value, days) {
+    const expires = new Date(Date.now() + days * 864e5).toUTCString();
+    document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/`;
+  }
+
+  // 頁面載入時檢查是否已填過
+  window.onload = function () {
+    if (getCookie(COOKIE_NAME)) {
+      showDone();
+    }
+  };
+
+  // 點擊按鈕後執行
+  function startSurvey() {
+    if (getCookie(COOKIE_NAME)) {
+      showDone();
+      return;
+    }
+    // 隨機選一份問卷
+    const idx = Math.floor(Math.random() * SURVEY_URLS.length);
+    setCookie(COOKIE_NAME, "1", COOKIE_DAYS);
+    window.location.href = SURVEY_URLS[idx];
+  }
+
+  // 顯示「已完成」畫面
+  function showDone() {
+    document.getElementById("app").innerHTML = `
+      <div class="icon">✅</div>
+      <h1>您已完成問卷</h1>
+      <p>感謝您的參與！<br>您的回答已記錄，無需重複填寫。</p>
+    `;
+  }
+</script>
+</body>
+</html>
