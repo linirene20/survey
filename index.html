@@ -18,7 +18,7 @@
       background: white;
       border-radius: 16px;
       padding: 48px 40px;
-      max-width: 420px;
+      max-width: 520px;
       width: 90%;
       text-align: center;
       box-shadow: 0 4px 24px rgba(0,0,0,0.08);
@@ -46,15 +46,16 @@
 <div class="card" id="app">
   <div class="icon">📋</div>
   <h1>問卷調查</h1>
-  <p>感謝您參與本次研究，請點擊下方按鈕開始填寫問卷。</p>
+  <p>您好！本問卷為學術研究用途，由臺灣藝術大學圖文傳播藝術學系學生執行，指導老師為王俊人教授。</p>
+  <p>本研究旨在了解消費者對不同包裝設計的感知與購買意願，預計填答時間：5–8 分鐘。</p>
+  <p>本問卷採全程匿名，資料僅供學術統計使用。</p>
+  <p class="note">⚠️ 建議使用電腦或平板填寫，以清楚辨識包裝圖片細節。</p>
+  <br>
   <button class="btn" onclick="startSurvey()">開始填寫問卷</button>
-  <p class="note">每位受試者僅需填寫一份問卷</p>
+  <p class="note" style="margin-top:16px;">感謝您撥冗參與！</p>
 </div>
 
 <script>
-  // =============================================
-  // 請將以下4個連結替換成你的 Google Forms 連結
-  // =============================================
   const SURVEY_URLS = [
     "https://docs.google.com/forms/d/e/1FAIpQLSdvSxjFTiUZaES7cmtLG3b9Xq8Bh0ul3S3nzrRZyp15esbktw/viewform?usp=header",
     "https://docs.google.com/forms/d/e/1FAIpQLSdJzx9jSUA2BM5zZAfFFAZaDRE_-e6upVY6Q2_vDCqrgu_kKw/viewform?usp=header",
@@ -62,47 +63,9 @@
     "https://docs.google.com/forms/d/e/1FAIpQLSeLCZo34jJujOiSKOXCOS83TVGPazbiOmlf3LxlQbdJGZnczg/viewform?usp=header"
   ];
 
-  const COOKIE_NAME = "survey_done";
-  const COOKIE_DAYS = 365;
-
-  // 讀取 cookie
-  function getCookie(name) {
-    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-    return match ? decodeURIComponent(match[2]) : null;
-  }
-
-  // 寫入 cookie
-  function setCookie(name, value, days) {
-    const expires = new Date(Date.now() + days * 864e5).toUTCString();
-    document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/`;
-  }
-
-  // 頁面載入時檢查是否已填過
-  window.onload = function () {
-    if (getCookie(COOKIE_NAME)) {
-      showDone();
-    }
-  };
-
-  // 點擊按鈕後執行
   function startSurvey() {
-    if (getCookie(COOKIE_NAME)) {
-      showDone();
-      return;
-    }
-    // 隨機選一份問卷
     const idx = Math.floor(Math.random() * SURVEY_URLS.length);
-    setCookie(COOKIE_NAME, "1", COOKIE_DAYS);
     window.location.href = SURVEY_URLS[idx];
-  }
-
-  // 顯示「已完成」畫面
-  function showDone() {
-    document.getElementById("app").innerHTML = `
-      <div class="icon">✅</div>
-      <h1>您已完成問卷</h1>
-      <p>感謝您的參與！<br>您的回答已記錄，無需重複填寫。</p>
-    `;
   }
 </script>
 </body>
